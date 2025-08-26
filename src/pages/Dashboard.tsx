@@ -19,11 +19,8 @@ const Dashboard: React.FC = () => {
   const fetchTasks = async () => {
     try {
       const res = await axiosInstance.get("/tasks");
-      console.log("📥 API Response (/tasks):", res);   // <-- debug whole response
-      console.log("✅ Data from backend:", res.data); // <-- debug only data
       setTasks(res.data);
     } catch (err: any) {
-      console.error("❌ Error fetching tasks:", err.response || err.message);
       alert(err.response?.data?.message || "Failed to fetch tasks");
     }
   };
@@ -36,16 +33,14 @@ const Dashboard: React.FC = () => {
     try {
       if (editTask) {
         const res = await axiosInstance.put(`/tasks/${editTask._id}`, data);
-        console.log("✏️ Updated Task:", res.data);
         setTasks(tasks.map(t => t._id === editTask._id ? res.data : t));
         setEditTask(null);
       } else {
         const res = await axiosInstance.post("/tasks", data);
-        console.log("➕ Created Task:", res.data);
         setTasks([...tasks, res.data]);
       }
     } catch (err: any) {
-      console.error("❌ Error saving task:", err.response || err.message);
+     
       alert(err.response?.data?.message || "Failed to save task");
     }
   };
@@ -53,10 +48,8 @@ const Dashboard: React.FC = () => {
   const handleDelete = async (id: string) => {
     try {
       const res = await axiosInstance.delete(`/tasks/${id}`);
-      console.log("🗑️ Deleted Task:", res.data);
       setTasks(tasks.filter(t => t._id !== id));
     } catch (err: any) {
-      console.error("❌ Error deleting task:", err.response || err.message);
       alert(err.response?.data?.message || "Failed to delete task");
     }
   };
